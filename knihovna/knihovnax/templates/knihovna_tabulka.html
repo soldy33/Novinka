@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knihovna Tabulka</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr.vracena {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Knihovna</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Aboniment</th>
+                <th>Název knihy</th>
+                <th>Datum výpůjčky</th>
+                <th>Datum vrácení</th>
+                <th>Prodloužit</th>
+                <th>Nový datum</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for kniha in knihovna_list %}
+                <tr {% if kniha.datum_vraceni and kniha.datum_vypujceni <= kniha.datum_vypujceni %}class="vracena"{% endif %}>
+                    <td>{{ kniha.aboniment }}</td>
+                    <td>{{ kniha.nazev_knihy }}</td>
+                    <td>{{ kniha.datum_vypujceni }}</td>
+                    <td>{{ kniha.datum_vraceni }}</td>
+                    <td>
+                        <form action="{% url 'prodlouzit' kniha.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Prodloužit</button>
+                        </form>
+                    </td>
+                    <td>{{ kniha.novy_datum }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
